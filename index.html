@@ -4,20 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
-    <title>PokeBank Login</title>
+    <link rel="icon" href="rsc/pokeball.ico" type="image/x-icon"/>
+    <title>Pokemon Bank Login</title>
 </head>
 <body>
-    <img src="rsc/logo.png">
-    <div id="logintxt">
-        <h1>Ingresa tu pin:</h1>
-    <br>
-    <form id="loginform">
-        <input type="password" id="pin" required>
+    <div id="bodydivnoback">
+        <img src="rsc/logo.png">
+        <div id="logintxt">
+            <h1>Ingresa tu PIN de 4 dígitos:</h1>
         <br>
-        <a href="pantallas.html">
-            <button type="button" id="loginbtn">Ingresar</button>
-        </a>
-    </form>
+        <form id="loginform">
+            <input type="password" id="pin" maxlength="4" required>
+            <br>
+            <a href="pantallas.html">
+                <button type="button" id="loginbtn">Ingresar</button>
+            </a>
+        </form>
+        </div>
     </div>
 </body>
 </html>

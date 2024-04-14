@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="rsc/pokeball.ico" type="image/x-icon"/>
+    <title>Pokemon Bank Pago de Servicios</title>
+</head>
+<body>
+    <div id="backbutton">
+        <a href="opciones.html">
+            <button type="button" id="salirbtn">Atrás</button>
+        </a>
+    </div>
+    <div id="bodydiv">
+        <img id="logo" src="rsc/logo.png">
+        <h1>Pago de Servicios</h1>
+        <br>
+        <p>¿Qué servicio desea pagar el día de hoy?</p>
+        <br>
+        <form>
+            <select>
+                <option>Luz</option>
+                <option>Agua</option>
+                <option>Teléfono</option>
+                <option>Internet</option>
+            </select>
+            <br>
+            <label for="factura">Número de factura:</label>
+            <input id="factura" type="number">
+            <br>
+            <label for="monto">Monto:</label>
+            <input id="monto" type="number">
+            <br>
+            <a href="success.html">
+                <button type="button" id="pagobtn">Pagar Servicio</button>
+            </a>
+        </form>
+    </div>
+</body>
+</html>

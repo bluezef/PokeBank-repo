@@ -1,20 +1,57 @@
-body {
-    font-family: Arial, sans-serif;
+body{
     background-color: #AEEB83;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+}
+
+#bodydiv {
     margin: 0;
     padding: 0;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+}
+
+#bodydivnoback{
+    margin:0;
+    padding-top: 52px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 h1 {
     margin-bottom: 20px;
+    font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+
+p {
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
 }
   
 input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+input[type="number"] {
     width: 100%;
     padding: 10px;
     margin-bottom: 20px;
@@ -45,4 +82,14 @@ form{
 #logintxt{
     margin:0;
     padding-top: 20px;
+}
+
+#backbutton{
+    margin-left:0;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
