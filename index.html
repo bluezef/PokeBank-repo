@@ -3,8 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="css/style.css">
     <link rel="icon" href="rsc/pokeball.ico" type="image/x-icon"/>
+    <script src="js/validate.min.js"></script>
+    <script src='js/localstorage.js'></script>
     <title>Pokemon Bank Login</title>
 </head>
 <body>
@@ -16,10 +18,59 @@
         <form id="loginform">
             <input type="password" id="pin" maxlength="4" required>
             <br>
-            <a href="pantallas.html">
-                <button type="button" id="loginbtn">Ingresar</button>
-            </a>
+            <button type="submit">Ingresar</button>
         </form>
+        <ul id="errorList"></ul>
+        <script>
+            var constraints ={
+                pin:{
+                    presence:true,
+                    numericality:{
+                        onlyInteger:true,
+                        notValid:'no es un número',
+                        equalTo:localStorage.getItem('pin'),
+                        notEqualTo:'es incorrecto'
+                    },
+                    length:{
+                        minimum:4,
+                        maximum:4,
+                        tooShort:'debe ser de 4 dígitos',
+                        tooLong:'debe ser de 4 dígitos'
+                    }
+                }
+            }
+
+            const form=document.getElementById('loginform');
+
+            form.addEventListener('submit',function(event){
+                event.preventDefault();
+                const formData={
+                    pin:document.getElementById('pin').value
+                };
+
+                const errors = validate(formData, constraints);
+
+                if(!errors){
+                    window.location.href='pantallas.html';
+                }
+                else{
+                    displayErrors(errors);
+                }
+            });
+
+            function displayErrors(errors){
+                const errorList=document.getElementById('errorList');
+                errorList.innerHTML='';
+
+                for(const field in errors){
+                    errors[field].forEach(error=>{
+                        const li=document.createElement('li');
+                        li.textContent='El '+`${error}`;
+                        errorList.appendChild(li);
+                    });
+                }
+            }
+        </script>
         </div>
     </div>
 </body>

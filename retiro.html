@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="css/style.css">
     <link rel="icon" href="rsc/pokeball.ico" type="image/x-icon"/>
+    <script src="js/validate.min.js"></script>
     <title>Pokemon Bank Transacciones</title>
 </head>
 <body>
@@ -16,13 +17,61 @@
         <br>
         <h1>Ingrese el monto a retirar:</h1>
         <br>
-        <form>
+        <form id='retiroform'>
             <label id="montolbl" for="monto">Monto:</label>
             <input type="number" id="monto">
-            <a href="success.html">
-                <button type="button" id="accion">Realizar acción</button>
-            </a>
+            <button type='submit'>Realizar acción</button>
         </form>
+        <ul id="errorList"></ul>
+        <script>
+            var constraints ={
+                monto:{
+                    presence:true,
+                    numericality:{
+                        onlyInteger:true,
+                        notValid:'no es un número',
+                        greaterThanOrEqualTo:5,
+                        notGreaterThanOrEqualTo:' debe ser mayor a $5',
+                        divisibleBy:5,
+                        notDivisibleBy:'debe ser un múltiplo de 5'
+                    },
+                }
+            }
+
+            const form=document.getElementById('retiroform');
+
+            form.addEventListener('submit',function(event){
+                event.preventDefault();
+                const formData={
+                    monto:document.getElementById('monto').value
+                };
+
+                const errors = validate(formData, constraints);
+
+                if(!errors){
+                    var currentbalance=parseFloat(localStorage.getItem('balance'));
+                    var monto=parseFloat(document.getElementById('monto').value);
+                    localStorage.setItem('balance',currentbalance-monto);
+                    window.location.href='success.html';
+                }
+                else{
+                    displayErrors(errors);
+                }
+            });
+
+            function displayErrors(errors){
+                const errorList=document.getElementById('errorList');
+                errorList.innerHTML='';
+
+                for(const field in errors){
+                    errors[field].forEach(error=>{
+                        const li=document.createElement('li');
+                        li.textContent='El '+`${error}`;
+                        errorList.appendChild(li);
+                    });
+                }
+            }
+        </script>
     </div>
 </body>
 </html>

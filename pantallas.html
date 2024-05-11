@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="css/style.css">
     <link rel="icon" href="rsc/pokeball.ico" type="image/x-icon"/>
     <title>Pokemon Bank Opciones</title>
 </head>
@@ -11,7 +11,10 @@
     <div id="bodydivnoback">
         <img src="rsc/logo.png">
         <br>
-        <h1>¡Bienvenido Ernesto González!</h1>
+        <h1 id='welcome'></h1>
+        <script>
+            document.getElementById('welcome').textContent='¡Bienvenido '+localStorage.getItem('name')+'!';
+        </script>
         <p>¿Qué desea hacer el día de hoy?</p>
         <br>
         <form>

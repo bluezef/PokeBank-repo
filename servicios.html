@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="css/style.css">
     <link rel="icon" href="rsc/pokeball.ico" type="image/x-icon"/>
+    <script src="js/validate.min.js"></script>
     <title>Pokemon Bank Pago de Servicios</title>
 </head>
 <body>
@@ -19,7 +20,7 @@
         <br>
         <p>¿Qué servicio desea pagar el día de hoy?</p>
         <br>
-        <form>
+        <form id="serviciosform">
             <select>
                 <option>Luz</option>
                 <option>Agua</option>
@@ -31,12 +32,67 @@
             <input id="factura" type="number">
             <br>
             <label for="monto">Monto:</label>
-            <input id="monto" type="number">
+            <input id="monto" step='0.01' type="number">
             <br>
-            <a href="success.html">
-                <button type="button" id="pagobtn">Pagar Servicio</button>
-            </a>
+            <button type="submit">Pagar Servicio</button>
         </form>
+        <ul id="errorList"></ul>
+        <script>
+            var constraints ={
+                factura:{
+                    presence:true,
+                    numericality:{
+                        notValid:'no es un número'
+                    },
+                    length:{
+                        minimum:10,
+                        tooShort:'debe ser mínimo de 10 dígitos'
+                    }
+                },
+                monto:{
+                    presence:true,
+                    numericality:{
+                        notValid:'no es un número',
+                    },
+                }
+            }
+
+            const form=document.getElementById('serviciosform');
+
+            form.addEventListener('submit',function(event){
+                event.preventDefault();
+                const formData={
+                    factura:document.getElementById('factura').value,
+                    monto:document.getElementById('monto').value
+                };
+
+                const errors = validate(formData, constraints);
+
+                if(!errors){
+                    var currentbalance=parseFloat(localStorage.getItem('balance'));
+                    var monto=parseFloat(document.getElementById('monto').value);
+                    localStorage.setItem('balance',currentbalance-monto);
+                    window.location.href='success.html';
+                }
+                else{
+                    displayErrors(errors);
+                }
+            });
+
+            function displayErrors(errors){
+                const errorList=document.getElementById('errorList');
+                errorList.innerHTML='';
+
+                for(const field in errors){
+                    errors[field].forEach(error=>{
+                        const li=document.createElement('li');
+                        li.textContent=`${error}`;
+                        errorList.appendChild(li);
+                    });
+                }
+            }
+            
+        </script>
     </div>
 </body>
 </html>
