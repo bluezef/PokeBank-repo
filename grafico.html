@@ -4,7 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/style.css">
-    <link rel="icon" href="rsc/pokeball.png" type="image/x-icon"/>
+    <link rel="icon" href="rsc/pokeball.ico" type="image/x-icon"/>
+    <script src="js/chart.umd.js"></script>
+    <script src="js/transacciones.js"></script>
     <title>Pokemon Bank Grafico de Transacciones</title>
 </head>
 <body>
@@ -15,7 +17,58 @@
     </div>
     <div id="bodydiv">
         <img src="rsc/logo.png">
-        <h1>Gráfico de Transacciones:</h1>
+        <div id="chart">
+            <canvas id="myChart" width="400px" height="400px"></canvas>
+        </div>
     </div>
+    <script>
+        var ctx=document.getElementById('myChart').getContext('2d');
+        
+        list=returnList();
+        aggregatedData={};
+
+        for(let i=0;i<list.length;i+=2){
+            var label = list[i];
+            var value = list[i+1];
+            if(aggregatedData[label]){
+                aggregatedData[label]+=value;
+            } else{
+                aggregatedData[label]=value;
+            }
+        }
+
+        listlabels = Object.keys(aggregatedData);
+        listvalues = Object.values(aggregatedData);
+
+        const data={
+            labels:listlabels,
+            datasets:[{
+                label:'Monto',
+                data:listvalues
+            }],
+            hoverOffset:4
+        }
+
+        var options = {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top',
+                },
+                title: {
+                    display: true,
+                    text: 'Gráfico de Transacciones:'
+                }
+            }
+        };
+
+        const config={
+            type:'pie',
+            data:data,
+            options:options
+        };
+        
+        var myChart= new Chart(ctx,config)
+    </script>
 </body>
 </html>

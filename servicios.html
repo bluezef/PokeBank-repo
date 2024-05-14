@@ -7,6 +7,8 @@
     <link rel="icon" href="rsc/pokeball.ico" type="image/x-icon"/>
     <script src="js/validate.min.js"></script>
     <script src="js/displayErrors.js"></script>
+    <script src="js/jspdf.min.js"></script>
+    <script src="js/transacciones.js"></script>
     <title>Pokemon Bank Pago de Servicios</title>
 </head>
 <body>
@@ -62,6 +64,7 @@
 
             form.addEventListener('submit',function(event){
                 event.preventDefault();
+
                 const formData={
                     factura:document.getElementById('factura').value,
                     monto:document.getElementById('monto').value
@@ -72,19 +75,18 @@
                 if(!errors){
                     var currentbalance=parseFloat(localStorage.getItem('balance'));
                     var monto=parseFloat(document.getElementById('monto').value);
-                    const newItem = document.getElementById('monto').value.trim();
-                    addItem(document.getElemenyById('servicio').value.trim());
+                    localStorage.setItem('balance',currentbalance-monto);
+                    addItem(document.getElementById('servicio').value);
                     addItem(monto);
                     var doc = new jsPDF();
                     doc.text('Pokémon Bank',105,50,null,null,'center');
                     doc.text('Comprobante de pago de servicios',105,65,null,null,'center');
                     doc.text('Nombre del Cliente: '+localStorage.getItem('name'),15,80);
-                    doc.text('Servicio a pagar:'+document.getElemenyById('servicio').value.trim(),15,95);
+                    doc.text('Servicio a pagar:'+document.getElementById('servicio').value,15,95);
                     doc.text('Monto debitado: $'+monto,15,110);
                     doc.text('Balance de la cuenta: $'+localStorage.getItem('balance'),15,125);
-                    doc.text('Este es un comprobante de depósito generado automáticamente.',105,260,null,null,'center')
+                    doc.text('Este es un comprobante de pago generado automáticamente.',105,260,null,null,'center')
                     doc.save('comprobante.pdf');
-                    localStorage.setItem('balance',currentbalance-monto);
                     window.location.href='success.html';
                 }
                 else{

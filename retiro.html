@@ -7,6 +7,8 @@
     <link rel="icon" href="rsc/pokeball.ico" type="image/x-icon"/>
     <script src="js/validate.min.js"></script>
     <script src="js/displayErrors.js"></script>
+    <script src="js/jspdf.min.js"></script>
+    <script src="js/transacciones.js"></script>
     <title>Pokemon Bank Transacciones</title>
 </head>
 <body>
@@ -52,7 +54,7 @@
                 if(!errors){
                     var currentbalance=parseFloat(localStorage.getItem('balance'));
                     var monto=parseFloat(document.getElementById('monto').value);
-                    const newItem = document.getElementById('monto').value.trim();
+                    localStorage.setItem('balance',currentbalance-monto);
                     addItem('Retiro');
                     addItem(monto);
                     var doc = new jsPDF();
@@ -63,7 +65,6 @@
                     doc.text('Balance de la cuenta: $'+localStorage.getItem('balance'),15,110);
                     doc.text('Este es un comprobante de retiro generado automáticamente.',105,260,null,null,'center')
                     doc.save('comprobante.pdf');
-                    localStorage.setItem('balance',currentbalance-monto);
                     window.location.href='success.html';
                 }
                 else{

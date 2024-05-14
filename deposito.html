@@ -56,7 +56,6 @@
                     var currentbalance=parseFloat(localStorage.getItem('balance'));
                     var monto=parseFloat(document.getElementById('monto').value);
                     localStorage.setItem('balance',currentbalance+monto);
-                    const newItem = document.getElementById('monto').value.trim();
                     addItem('Depósito');
                     addItem(monto);
                     var doc = new jsPDF();
