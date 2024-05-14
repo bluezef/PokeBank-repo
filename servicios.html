@@ -4,11 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/sweetalert2.min.css">
     <link rel="icon" href="rsc/pokeball.ico" type="image/x-icon"/>
     <script src="js/validate.min.js"></script>
     <script src="js/displayErrors.js"></script>
     <script src="js/jspdf.min.js"></script>
     <script src="js/transacciones.js"></script>
+    <script src="js/sweetalert2.min.js"></script>
     <title>Pokemon Bank Pago de Servicios</title>
 </head>
 <body>
@@ -45,17 +47,14 @@
                 factura:{
                     presence:true,
                     numericality:{
-                        notValid:'no es un número'
                     },
                     length:{
                         minimum:10,
-                        tooShort:'debe ser mínimo de 10 dígitos'
                     }
                 },
                 monto:{
                     presence:true,
                     numericality:{
-                        notValid:'no es un número',
                     },
                 }
             }
@@ -78,19 +77,11 @@
                     localStorage.setItem('balance',currentbalance-monto);
                     addItem(document.getElementById('servicio').value);
                     addItem(monto);
-                    var doc = new jsPDF();
-                    doc.text('Pokémon Bank',105,50,null,null,'center');
-                    doc.text('Comprobante de pago de servicios',105,65,null,null,'center');
-                    doc.text('Nombre del Cliente: '+localStorage.getItem('name'),15,80);
-                    doc.text('Servicio a pagar:'+document.getElementById('servicio').value,15,95);
-                    doc.text('Monto debitado: $'+monto,15,110);
-                    doc.text('Balance de la cuenta: $'+localStorage.getItem('balance'),15,125);
-                    doc.text('Este es un comprobante de pago generado automáticamente.',105,260,null,null,'center')
-                    doc.save('comprobante.pdf');
-                    window.location.href='success.html';
+                    printPDF('Pago de '+document.getElementById('servicio').value,monto);
+                    showSuccessAlert('pago');
                 }
                 else{
-                    displayErrors(errors);
+                    Swal.fire('Pago fallido','Por favor revise el número de su factura, debe contar con 10 dígitos como mínimo','error');
                 }
             });
             

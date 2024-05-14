@@ -4,17 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/sweetalert2.min.css">
     <link rel="icon" href="rsc/pokeball.ico" type="image/x-icon"/>
     <script src="js/validate.min.js"></script>
-    <script src='js/localstorage.js'></script>
+    <script src='js/transacciones.js'></script>
     <script src="js/displayErrors.js"></script>
+    <script src="js/sweetalert2.min.js"></script>
     <title>Pokemon Bank Login</title>
 </head>
 <body>
     <div id="bodydivnoback">
         <img src="rsc/logo.png">
         <div id="logintxt">
-            <h1>Ingresa tu PIN de 4 dígitos:</h1>
+            <h1>Ingresa tu PIN:</h1>
         <br>
         <form id="loginform">
             <input type="password" id="pin" maxlength="4" required>
@@ -23,20 +25,18 @@
         </form>
         <ul id="errorList"></ul>
         <script>
+            init();
+
             var constraints ={
                 pin:{
                     presence:true,
                     numericality:{
                         onlyInteger:true,
-                        notValid:'no es un número',
                         equalTo:parseInt(localStorage.getItem('pin')),
-                        notEqualTo:'es incorrecto'
                     },
                     length:{
                         minimum:4,
                         maximum:4,
-                        tooShort:'debe ser de 4 dígitos',
-                        tooLong:'debe ser de 4 dígitos'
                     }
                 }
             }
@@ -55,7 +55,7 @@
                     window.location.href='pantallas.html';
                 }
                 else{
-                    displayErrors(errors);
+                    Swal.fire('Pin incorrecto','El pin ingresado debe ser de 4 dígitos','error');
                 }
             });
         </script>

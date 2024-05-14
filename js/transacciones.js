@@ -1,3 +1,10 @@
+function init(){
+    localStorage.setItem('name','Ash Ketchum');
+    localStorage.setItem('pin',1234);
+    localStorage.setItem('balance',500.00);
+    localStorage.setItem('transacciones','[]');
+}
+
 function addItem(newItem){
     let itemList=JSON.parse(localStorage.getItem('transacciones'))||[];
     itemList.push(newItem);
@@ -30,14 +37,34 @@ function showList(list){
     }
 }
 
-const range = (start, end, step = 1) => {
-    let output = [];
-    if (typeof end === 'undefined') {
-      end = start;
-      start = 0;
-    }
-    for (let i = start; i < end; i += step) {
-      output.push(' ');
-    }
-    return output;
-};
+function printPDF(transaccion,monto){
+    var doc = new jsPDF();
+    doc.text('Pokémon Bank',105,50,null,null,'center');
+    doc.text('Comprobante de '+transaccion,105,65,null,null,'center');
+    doc.text('Nombre del Cliente: '+localStorage.getItem('name'),15,80);
+    doc.text('Transacción: '+transaccion,15,95);
+    doc.text('Monto: $'+monto,15,110);
+    doc.text('Balance de la cuenta: $'+localStorage.getItem('balance'),15,125);
+    doc.text('Este es un comprobante de '+transaccion+' generado automáticamente.',105,260,null,null,'center')
+    doc.save('comprobante.pdf');
+}
+
+function showSuccessAlert(transaccion) {
+    Swal.fire({
+        title: '¡Transacción Completada!',
+        text: 'Tu '+transaccion+' fue completado exitosamente',
+        icon: 'success',
+        showCancelButton: true,
+        confirmButtonText: 'Realizar otra transacción',
+        cancelButtonText: 'Terminar Sesión'
+    }).then((result) => {
+        // If "Go to Page 1" button is clicked, navigate to Page 1
+        if (result.isConfirmed) {
+            window.location.href = 'opciones.html';
+        } 
+        // If "Go to Page 2" button is clicked, navigate to Page 2
+        else if (result.dismiss === Swal.DismissReason.cancel) {
+            window.location.href = 'index.html';
+        }
+    });
+}
