@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="css/style.css">
     <link rel="icon" href="rsc/pokeball.ico" type="image/x-icon"/>
     <script src="js/validate.min.js"></script>
+    <script src="js/displayErrors.js"></script>
     <title>Pokemon Bank Pago de Servicios</title>
 </head>
 <body>
@@ -21,11 +22,11 @@
         <p>¿Qué servicio desea pagar el día de hoy?</p>
         <br>
         <form id="serviciosform">
-            <select>
-                <option>Luz</option>
-                <option>Agua</option>
-                <option>Teléfono</option>
-                <option>Internet</option>
+            <select id="servicio">
+                <option value="Luz">Luz</option>
+                <option value="Agua">Agua</option>
+                <option value="Teléfono">Teléfono</option>
+                <option value="Internet">Internet</option>
             </select>
             <br>
             <label for="factura">Número de factura:</label>
@@ -71,6 +72,18 @@
                 if(!errors){
                     var currentbalance=parseFloat(localStorage.getItem('balance'));
                     var monto=parseFloat(document.getElementById('monto').value);
+                    const newItem = document.getElementById('monto').value.trim();
+                    addItem(document.getElemenyById('servicio').value.trim());
+                    addItem(monto);
+                    var doc = new jsPDF();
+                    doc.text('Pokémon Bank',105,50,null,null,'center');
+                    doc.text('Comprobante de pago de servicios',105,65,null,null,'center');
+                    doc.text('Nombre del Cliente: '+localStorage.getItem('name'),15,80);
+                    doc.text('Servicio a pagar:'+document.getElemenyById('servicio').value.trim(),15,95);
+                    doc.text('Monto debitado: $'+monto,15,110);
+                    doc.text('Balance de la cuenta: $'+localStorage.getItem('balance'),15,125);
+                    doc.text('Este es un comprobante de depósito generado automáticamente.',105,260,null,null,'center')
+                    doc.save('comprobante.pdf');
                     localStorage.setItem('balance',currentbalance-monto);
                     window.location.href='success.html';
                 }
@@ -78,19 +91,6 @@
                     displayErrors(errors);
                 }
             });
-
-            function displayErrors(errors){
-                const errorList=document.getElementById('errorList');
-                errorList.innerHTML='';
-
-                for(const field in errors){
-                    errors[field].forEach(error=>{
-                        const li=document.createElement('li');
-                        li.textContent=`${error}`;
-                        errorList.appendChild(li);
-                    });
-                }
-            }
             
         </script>
     </div>

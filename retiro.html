@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="css/style.css">
     <link rel="icon" href="rsc/pokeball.ico" type="image/x-icon"/>
     <script src="js/validate.min.js"></script>
+    <script src="js/displayErrors.js"></script>
     <title>Pokemon Bank Transacciones</title>
 </head>
 <body>
@@ -51,6 +52,17 @@
                 if(!errors){
                     var currentbalance=parseFloat(localStorage.getItem('balance'));
                     var monto=parseFloat(document.getElementById('monto').value);
+                    const newItem = document.getElementById('monto').value.trim();
+                    addItem('Retiro');
+                    addItem(monto);
+                    var doc = new jsPDF();
+                    doc.text('Pokémon Bank',105,50,null,null,'center');
+                    doc.text('Comprobante de retiro',105,65,null,null,'center');
+                    doc.text('Nombre del Cliente: '+localStorage.getItem('name'),15,80);
+                    doc.text('Monto retirado: $'+monto,15,95);
+                    doc.text('Balance de la cuenta: $'+localStorage.getItem('balance'),15,110);
+                    doc.text('Este es un comprobante de retiro generado automáticamente.',105,260,null,null,'center')
+                    doc.save('comprobante.pdf');
                     localStorage.setItem('balance',currentbalance-monto);
                     window.location.href='success.html';
                 }
@@ -58,19 +70,6 @@
                     displayErrors(errors);
                 }
             });
-
-            function displayErrors(errors){
-                const errorList=document.getElementById('errorList');
-                errorList.innerHTML='';
-
-                for(const field in errors){
-                    errors[field].forEach(error=>{
-                        const li=document.createElement('li');
-                        li.textContent='El '+`${error}`;
-                        errorList.appendChild(li);
-                    });
-                }
-            }
         </script>
     </div>
 </body>

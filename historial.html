@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/style.css">
     <link rel="icon" href="rsc/pokeball.ico" type="image/x-icon"/>
+    <script src="js/transacciones.js"></script>
     <title>Pokemon Bank Historial de Transacciones</title>
 </head>
 <body>
@@ -18,26 +19,11 @@
         <br>
         <h1>Historial de Transacciones:</h1>
         <br>
-        <div id="tablespace">
-            <table id="historialtbl">
-                <tr>
-                    <td>
-                        Crunchyroll
-                    </td>
-                    <td>
-                        $4.99
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        Subway
-                    </td>
-                    <td>
-                        $3.15
-                    </td>
-                </tr>
-            </table>
-        </div>
+        <ul id="itemList"></ul>
+        <script>
+            list=returnList();
+            showList(list);
+        </script>
     </div>
 </body>
 </html>

@@ -6,6 +6,9 @@
     <link rel="stylesheet" href="css/style.css">
     <link rel="icon" href="rsc/pokeball.ico" type="image/x-icon"/>
     <script src="js/validate.min.js"></script>
+    <script src="js/displayErrors.js"></script>
+    <script src="js/jspdf.min.js"></script>
+    <script src="js/transacciones.js"></script>
     <title>Pokemon Bank Transacciones</title>
 </head>
 <body>
@@ -39,9 +42,10 @@
             }
 
             const form=document.getElementById('depositoform');
-
+            
             form.addEventListener('submit',function(event){
                 event.preventDefault();
+
                 const formData={
                     monto:document.getElementById('monto').value
                 };
@@ -52,6 +56,17 @@
                     var currentbalance=parseFloat(localStorage.getItem('balance'));
                     var monto=parseFloat(document.getElementById('monto').value);
                     localStorage.setItem('balance',currentbalance+monto);
+                    const newItem = document.getElementById('monto').value.trim();
+                    addItem('Depósito');
+                    addItem(monto);
+                    var doc = new jsPDF();
+                    doc.text('Pokémon Bank',105,50,null,null,'center');
+                    doc.text('Comprobante de depósito',105,65,null,null,'center');
+                    doc.text('Nombre del Cliente: '+localStorage.getItem('name'),15,80);
+                    doc.text('Monto depositado: $'+monto,15,95);
+                    doc.text('Balance de la cuenta: $'+localStorage.getItem('balance'),15,110);
+                    doc.text('Este es un comprobante de depósito generado automáticamente.',105,260,null,null,'center')
+                    doc.save('comprobante.pdf');
                     window.location.href='success.html';
                 }
                 else{
@@ -59,18 +74,7 @@
                 }
             });
 
-            function displayErrors(errors){
-                const errorList=document.getElementById('errorList');
-                errorList.innerHTML='';
-
-                for(const field in errors){
-                    errors[field].forEach(error=>{
-                        const li=document.createElement('li');
-                        li.textContent='El '+`${error}`;
-                        errorList.appendChild(li);
-                    });
-                }
-            }
+            
         </script>
     </div>
 </body>
