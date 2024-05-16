@@ -42,6 +42,7 @@
         </form>
         <ul id="errorList"></ul>
         <script>
+            //Crea el diccionario de validación para los elementos con sus mensajes creados
             var constraints ={
                 NPE:{
                     presence:true,
@@ -55,33 +56,44 @@
                 monto:{
                     presence:true,
                     numericality:{
+                        //Verifica que el monto no sea mayor al balance de la cuenta
                         lessThanOrEqualTo:parseFloat(localStorage.getItem('balance')),
                         notLessThanOrEqualTo:'No cuenta con fondos suficientes para realizar el pago solicitado'
                     },
                 }
             }
 
+            //Toma el elemento loginform para después asignar el eventlistener submit
             const form=document.getElementById('serviciosform');
-
             form.addEventListener('submit',function(event){
+                //previene que se envíe el elemento sin hacer la validación
                 event.preventDefault();
-
+                //Crea el dict formData para asignar qué campos se estarán validando
                 const formData={
                     NPE:document.getElementById('npe').value,
                     monto:document.getElementById('monto').value
                 };
-
+                //Utiliza la función validate de validatejs y lo guarda en errors como un dict
                 const errors = validate(formData, constraints,{fullMessages: false});
-
+                //Si errors está vacío significa que no hay errores
                 if(!errors){
+                    //Llama al balance guardado en el localStorage, y recoge los valores de monto, npe y servicio
                     var currentbalance=parseFloat(localStorage.getItem('balance'));
                     var monto=parseFloat(document.getElementById('monto').value);
+                    var npe=document.getElementById('npe').value;
+                    var servicio=' de '+document.getElementById('servicio').value;
+                    //Modifica el balance guardando ahora el balance anterior menos el monto en el item balance
                     localStorage.setItem('balance',currentbalance-monto);
-                    addItem(document.getElementById('servicio').value);
+                    //Añade el concepto 'Pago de [servicio]', y el monto a la lista de transacciones
+                    addItem('Pago'+servicio);
                     addItem(monto);
-                    printPDF('Pago de '+document.getElementById('servicio').value,monto);
+                    //Llama a la función printPDF para guardar el PDF con los valores de monto, npe, servicio y el tipo de transacción Pago
+                    printPDF('Pago',monto,npe,servicio);
+                    //Muestra la alerta de éxito de pago
                     showSuccessAlert('pago');
                 }
+                //En caso contrario, guarda un string con los errores en errorlist
+                //dispara una alerta de sweetalert mostrando los errores que se encontraron en la validación
                 else{
                     let errorlist=displayErrors(errors)
                     Swal.fire('Error al realizar el pago',`${errorlist}`,'error');

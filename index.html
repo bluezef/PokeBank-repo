@@ -24,7 +24,9 @@
         </form>
         <ul id="errorList"></ul>
         <script>
+            //Llama la función init para inicializar las variables en el localStorage
             init();
+            //Crea el diccionario de validación para los elementos con sus mensajes creados
             var constraints ={
                 pin:{
                     presence:true,
@@ -41,16 +43,24 @@
                     }
                 }
             }
+            //Toma el elemento loginform para después asignar el eventlistener submit
             const form=document.getElementById('loginform');
             form.addEventListener('submit',function(event){
+                //previene que se envíe el elemento sin hacer la validación
                 event.preventDefault();
+                //Crea el dict formData para asignar qué campos se estarán validando
                 const formData={
                     pin:document.getElementById('pin').value
                 };
+                //Utiliza la función validate de validatejs y lo guarda en errors como un dict
+                //fullMesages:false para que utilice los mensajes establecidos en el constraints
                 const errors = validate(formData, constraints,{fullMessages: false});
+                //Si errors está vacío significa que no hay errores por lo que nos permite pasar a la selección de pantallas
                 if(!errors){
                     window.location.href='pantallas.html';
                 }
+                //En caso contrario, guarda un string con los errores en errorlist
+                //dispara una alerta de sweetalert mostrando los errores que se encontraron en la validación
                 else{
                     let errorlist=displayErrors(errors)
                     Swal.fire('Inicio de Sesión Incorrecto',`${errorlist}`,'error');

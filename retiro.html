@@ -29,14 +29,17 @@
         </form>
         <ul id="errorList"></ul>
         <script>
+            //Crea el diccionario de validación para los elementos con sus mensajes creados
             var constraints ={
                 monto:{
                     presence:true,
                     numericality:{
                         onlyInteger:true,
+                        //El depósito debe ser mayor a 5 y múltiplo de 5 ya que los ATM solo utilizan billetes de 5, 10 y 20
                         greaterThanOrEqualTo:5,
+                        divisibleBy:5,                    
+                        //El monto debe ser menor a los fondos de la cuenta
                         lessThanOrEqualTo:parseFloat(localStorage.getItem('balance')),
-                        divisibleBy:5,
                         notGreaterThanOrEqualTo:'El monto de su retiro debe ser mayor a $5',
                         notLessThanOrEqualTo:'No cuenta con fondos suficientes para realizar el retiro solicitado',
                         notDivisibleBy:'El monto de su retiro debe ser múltiplo de $5'
@@ -44,25 +47,34 @@
                 }
             }
 
+            //Toma el elemento loginform para después asignar el eventlistener submit
             const form=document.getElementById('retiroform');
-
             form.addEventListener('submit',function(event){
+                //previene que se envíe el elemento sin hacer la validación
                 event.preventDefault();
+                //Crea el dict formData para asignar qué campos se estarán validando
                 const formData={
                     monto:document.getElementById('monto').value
                 };
-
+                //Utiliza la función validate de validatejs y lo guarda en errors como un dict
                 const errors = validate(formData, constraints,{fullMessages: false});
-
+                //Si errors está vacío significa que no hay errores
                 if(!errors){
+                    //Llama al balance guardado en el localStorage, y recoge el valor de monto
                     var currentbalance=parseFloat(localStorage.getItem('balance'));
                     var monto=parseFloat(document.getElementById('monto').value);
+                    //Modifica el balance guardando ahora el balance anterior menos el monto en el item balance
                     localStorage.setItem('balance',currentbalance-monto);
+                    //Añade el concepto 'Retiro', y el monto a la lista de transacciones
                     addItem('Retiro');
                     addItem(monto);
+                    //Llama a la función printPDF para guardar el PDF con los valores de monto y el tipo de transacción Retiro
                     printPDF('Retiro',monto);
+                    //Muestra la alerta de éxito de depósito
                     showSuccessAlert('retiro');
                 }
+                //En caso contrario, guarda un string con los errores en errorlist
+                //dispara una alerta de sweetalert mostrando los errores que se encontraron en la validación
                 else{
                     let errorlist=displayErrors(errors)
                     Swal.fire('Error al realizar el retiro',`${errorlist}`,'error'); 

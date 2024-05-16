@@ -29,11 +29,13 @@
         </form>
         <ul id="errorList"></ul>
         <script>
+            //Crea el diccionario de validación para los elementos con sus mensajes creados
             var constraints ={
                 monto:{
                     presence:true,
                     numericality:{
                         onlyInteger:true,
+                        //El depósito debe ser mayor a 5 y múltiplo de 5 ya que los ATM solo utilizan billetes de 5, 10 y 20
                         greaterThanOrEqualTo:5,
                         divisibleBy:5,
                         notGreaterThanOrEqualTo:'El monto de su depósito debe ser mayor a $5',
@@ -42,26 +44,34 @@
                 }
             }
 
+            //Toma el elemento loginform para después asignar el eventlistener submit
             const form=document.getElementById('depositoform');
-            
             form.addEventListener('submit',function(event){
+                //previene que se envíe el elemento sin hacer la validación
                 event.preventDefault();
-
+                //Crea el dict formData para asignar qué campos se estarán validando
                 const formData={
                     monto:document.getElementById('monto').value
                 };
-
+                //Utiliza la función validate de validatejs y lo guarda en errors como un dict
                 const errors = validate(formData, constraints,{fullMessages: false});
-
+                //Si errors está vacío significa que no hay errores
                 if(!errors){
+                    //Llama al balance guardado en el localStorage, y recoge el valor de monto
                     var currentbalance=parseFloat(localStorage.getItem('balance'));
                     var monto=parseFloat(document.getElementById('monto').value);
+                    //Modifica el balance guardando ahora el balance anterior menos el monto en el item balance
                     localStorage.setItem('balance',currentbalance+monto);
+                    //Añade el concepto 'Depósito', y el monto a la lista de transacciones
                     addItem('Depósito');
                     addItem(monto);
+                    //Llama a la función printPDF para guardar el PDF con los valores de monto y el tipo de transacción Depósito
                     printPDF('Depósito',monto);
+                    //Muestra la alerta de éxito de depósito
                     showSuccessAlert('depósito');
                 }
+                //En caso contrario, guarda un string con los errores en errorlist
+                //dispara una alerta de sweetalert mostrando los errores que se encontraron en la validación
                 else{
                     let errorlist=displayErrors(errors)
                     Swal.fire('Error al realizar el depósito',`${errorlist}`,'error');    

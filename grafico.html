@@ -22,52 +22,55 @@
         </div>
     </div>
     <script>
+        //Toma como espacio el elemento tipo canvas con id myChart para crear el gráfico
         var ctx=document.getElementById('myChart').getContext('2d');
-        
-        list=returnList();
-        aggregatedData={};
+        //llama a la función aggData y la almacena en aggregatedData
+        aggregatedData=aggData();       
 
-        for(let i=0;i<list.length;i+=2){
-            var label = list[i];
-            var value = list[i+1];
-            if(aggregatedData[label]){
-                aggregatedData[label]+=value;
-            } else{
-                aggregatedData[label]=value;
-            }
-        }
-
+        //Crea 2 listas, una con las keys de aggregatedData y otra con los values
         listlabels = Object.keys(aggregatedData);
         listvalues = Object.values(aggregatedData);
 
+        //Crea un dict data con la información para crear el gráfico
         const data={
+            //labels será listlabels, datasets se le llamará monto a la columna y la data serán listvalues
             labels:listlabels,
             datasets:[{
                 label:'Monto',
                 data:listvalues
             }],
+            //hoverOffset es cuanto se desplazará del cursor la etiqueta al pasar sobre el gráfico
             hoverOffset:4
         }
 
+        //Opciones del gráfico
         var options = {
+            //Debe ser responsivo
             responsive: true,
+            //Tendrá una leyenda en la parte superior
+            //Título 'Gráfico de Transacciones con letra tamaño 30px'
             plugins: {
                 legend: {
                     position: 'top',
                 },
                 title: {
                     display: true,
-                    text: 'Gráfico de Transacciones:'
+                    text: 'Gráfico de Transacciones:',
+                    font: {
+                        size:30
+                    }
                 }
             }
         };
 
+        //Configuración del gráfico, tipo pastel, data, y con las opciones previamente seteadas
         const config={
             type:'pie',
             data:data,
             options:options
         };
         
+        //Crea el chart en el elemento ctx con la configuración establecida
         var myChart= new Chart(ctx,config)
     </script>
 </body>
