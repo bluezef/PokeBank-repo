@@ -1,5 +1,6 @@
 function init(){
     localStorage.setItem('name','Ash Ketchum');
+    localStorage.setItem('cuenta','0987654321');
     localStorage.setItem('pin',1234);
     localStorage.setItem('balance',500.00);
     localStorage.setItem('transacciones','[]');
@@ -67,4 +68,14 @@ function showSuccessAlert(transaccion) {
             window.location.href = 'index.html';
         }
     });
+}
+
+function displayErrors(errors){
+    var errorList=''
+    for(const field in errors){
+        errors[field].forEach(error=>{
+            errorList+=`${error}`+('<br>');
+        });
+    }
+    return errorList
 }

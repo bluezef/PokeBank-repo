@@ -34,11 +34,12 @@
                     presence:true,
                     numericality:{
                         onlyInteger:true,
-                        notValid:'no es un número',
                         greaterThanOrEqualTo:5,
-                        notGreaterThanOrEqualTo:' debe ser mayor a $5',
+                        lessThanOrEqualTo:parseFloat(localStorage.getItem('balance')),
                         divisibleBy:5,
-                        notDivisibleBy:'debe ser un múltiplo de 5'
+                        notGreaterThanOrEqualTo:'El monto de su retiro debe ser mayor a $5',
+                        notLessThanOrEqualTo:'No cuenta con fondos suficientes para realizar el retiro solicitado',
+                        notDivisibleBy:'El monto de su retiro debe ser múltiplo de $5'
                     },
                 }
             }
@@ -51,7 +52,7 @@
                     monto:document.getElementById('monto').value
                 };
 
-                const errors = validate(formData, constraints);
+                const errors = validate(formData, constraints,{fullMessages: false});
 
                 if(!errors){
                     var currentbalance=parseFloat(localStorage.getItem('balance'));
@@ -63,7 +64,8 @@
                     showSuccessAlert('retiro');
                 }
                 else{
-                    Swal.fire('Retiro fallido','El monto a retirar debe ser mayor a $5 y múltiplo de 5','error');
+                    let errorlist=displayErrors(errors)
+                    Swal.fire('Error al realizar el retiro',`${errorlist}`,'error'); 
                 }
             });
         </script>

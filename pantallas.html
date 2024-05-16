@@ -12,8 +12,10 @@
         <img src="rsc/logo.png">
         <br>
         <h1 id='welcome'></h1>
+        <h2 id='cuenta'></h2>
         <script>
             document.getElementById('welcome').textContent='¡Bienvenido '+localStorage.getItem('name')+'!';
+            document.getElementById('cuenta').textContent='Número de cuenta: '+localStorage.getItem('cuenta');
         </script>
         <p>¿Qué desea hacer el día de hoy?</p>
         <br>

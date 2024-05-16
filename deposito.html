@@ -36,6 +36,8 @@
                         onlyInteger:true,
                         greaterThanOrEqualTo:5,
                         divisibleBy:5,
+                        notGreaterThanOrEqualTo:'El monto de su depósito debe ser mayor a $5',
+                        notDivisibleBy:'El monto de su depósito debe ser múltiplo de $5'
                     },
                 }
             }
@@ -49,7 +51,7 @@
                     monto:document.getElementById('monto').value
                 };
 
-                const errors = validate(formData, constraints);
+                const errors = validate(formData, constraints,{fullMessages: false});
 
                 if(!errors){
                     var currentbalance=parseFloat(localStorage.getItem('balance'));
@@ -61,7 +63,8 @@
                     showSuccessAlert('depósito');
                 }
                 else{
-                    Swal.fire('Depósito fallido','El monto a depositar debe ser mayor a $5 y múltiplo de 5','error');
+                    let errorlist=displayErrors(errors)
+                    Swal.fire('Error al realizar el depósito',`${errorlist}`,'error');    
                 }
             });
 
