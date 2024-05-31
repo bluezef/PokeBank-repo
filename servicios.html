@@ -57,7 +57,9 @@
                     presence:true,
                     numericality:{
                         //Verifica que el monto no sea mayor al balance de la cuenta
+                        higherThanOrEqualTo:0,
                         lessThanOrEqualTo:parseFloat(localStorage.getItem('balance')),
+                        higherThanOrEqualTo: 'Ingrese un valor positivo',
                         notLessThanOrEqualTo:'No cuenta con fondos suficientes para realizar el pago solicitado'
                     },
                 }
