@@ -56,7 +56,7 @@
                 monto:{
                     presence:true,
                     numericality:{
-                        //Verifica que el monto no sea mayor al balance de la cuenta
+                        //Verifica que el monto no sea mayor al balance de la cuenta ni menor a 0
                         greaterThan:0,
                         lessThanOrEqualTo:parseFloat(localStorage.getItem('balance')),
                         notGreaterThan: 'Ingrese un valor positivo',
